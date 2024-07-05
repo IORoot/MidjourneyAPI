@@ -15,7 +15,10 @@ on:
         prompt:
           description: 'Midjourney Prompt'     
           required: true
-
+        gdrive_folder:
+          description: 'GDrive_Folder'     
+          required: true
+          default: 'Automation/Midjourney/'  
 
 jobs:
 
@@ -92,7 +95,9 @@ jobs:
             # ╰───────────────────────────────────────────────────────╯
             - name: 🌥️ Google Drive - upload
               run: |
-                rclone copy . --include "*.png" --include "*.jpg" --include "*.jpeg"  ./midjourney_image.jpg GDrive:/ --config rclone.conf
+                mkdir -p images
+                mv *.png images || true
+                rclone copy ./images GDrive:/${{ github.event.inputs.GDRIVE_FOLDER }}  --config rclone.conf
 
 
 
