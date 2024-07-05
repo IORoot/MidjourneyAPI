@@ -87,6 +87,7 @@ jobs:
             - name: 🏞️ Midjourney - Download Images
               run: |
                 ./download_images.sh
+                ls -la
 
 
 
