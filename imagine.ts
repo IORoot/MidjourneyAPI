@@ -137,6 +137,10 @@ async function main() {
             return;
         }
     });
+
+    // Write to file - method B
+    const filePathB = path.join(__dirname, 'midjourney_image_url_B.json');
+    await fs.promises.writeFile(filePathB, outputText);
     
     
 
