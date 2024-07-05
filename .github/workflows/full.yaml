@@ -5,7 +5,7 @@
 # RCLONE_CONF_B64 = Configuration of rCLone to allow access to Google Drive.
 # ENV_B64 = Base64 Version of the .env file.
 
-name: 🎢 Full Video Constructor
+name: 🏞️ Generate Midjourney Image
 
 
 on:
@@ -31,6 +31,7 @@ jobs:
               uses: actions/checkout@v3
 
 
+
             # ╭───────────────────────────────────────────────────────╮
             # │      DECODE THE BASE64 CONFIGS READY TO BE USED       │
             # ╰───────────────────────────────────────────────────────╯
@@ -40,11 +41,11 @@ jobs:
                 echo "${{ secrets.ENV_B64 }}" | base64 --decode > .env
 
 
+
             # ╭───────────────────────────────────────────────────────╮
             # │                    Install rClone                     │
             # ╰───────────────────────────────────────────────────────╯
             - name: 📹 DOWNLOAD - Install rClone
-              if: ${{ env.VC_DOWNLOAD_RUN }}
               run: |
                 sudo apt install rclone
 
@@ -53,16 +54,9 @@ jobs:
             # ╭───────────────────────────────────────────────────────╮
             # │                  Run outputs script                   │
             # ╰───────────────────────────────────────────────────────╯
-            - name: 📬 OUTPUTS - Run Outputs
-              if: ${{ env.VC_OUTPUT_RUN }}
+            - name: 🏞️ Midjourney - Setup
               run: |
-                cat config.json | jq -r '.output.outputs' > ${GITHUB_WORKSPACE}/output_config.json
-                cat ./output_config.json
-                ./scripts/outputs/outputs.sh \
-                    --json ${GITHUB_WORKSPACE}/output_config.json \
-                    --rclone ./rclone.conf \
-                    --sshuser ${{ secrets.SSH_USER }} \
-                    --sshpass ${{ secrets.SSH_PASS }}
+                npm install
 
 
 
