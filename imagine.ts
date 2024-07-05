@@ -63,6 +63,7 @@ if (!prompt) {
 
 async function main() {
 
+    let outputText
 
 	// ╭───────────────────────────────────────────────────────╮
 	// │              Establish Midjourney Client              │
@@ -81,62 +82,62 @@ async function main() {
     // │                  Run Imagine Command                  │
     // ╰───────────────────────────────────────────────────────╯
     const imagine = await client.Imagine(prompt);
-    console.log({ imagine });
     if (!imagine) {
         console.log("no message");
         return;
     }
+    // console.log( JSON.stringify(imagine, null, 2) );
+    outputText = imagine.uri + '\n'
+
 
     // ╭───────────────────────────────────────────────────────╮
     // │               Select Image to upscale                 │
     // ╰───────────────────────────────────────────────────────╯
-    const selected = await client.Upscale({
+    const selectedOne = await client.Upscale({
         index: 1,
         msgId: <string>imagine.id,
         hash: <string>imagine.hash,
         flags: imagine.flags,
         content: imagine.content,
     });
-    // console.log( JSON.stringify(selected, null, 2) );
-
+    // console.log( JSON.stringify(selectedOne, null, 2) );
+    // outputText += selectedOne.uri + '\n'
 
     // ╭───────────────────────────────────────────────────────╮
-    // │               Upsample on Selected Image              │
+    // │             Upsample on SelectedOne Image             │
     // ╰───────────────────────────────────────────────────────╯
-    const upsample = selected?.options?.find((o) => o.label === "Upscale (Subtle)");
+    const upsample = selectedOne?.options?.find((o) => o.label === "Upscale (Subtle)");
     if (!upsample) {
         console.log("no upsample");
         return;
     }
 
-    // Custom UpSample
+    // ╭───────────────────────────────────────────────────────╮
+    // │                    Custom UpSample                    │
+    // ╰───────────────────────────────────────────────────────╯
     const CustomUpsampleSubtle = await client.Custom({
-        msgId: <string>selected.id,
-        flags: selected.flags,
+        msgId: <string>selectedOne.id,
+        flags: selectedOne.flags,
         customId: upsample.custom,
     });
     // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
-
-    console.log(CustomUpsampleSubtle.uri)
+    // console.log(CustomUpsampleSubtle.uri)
 
     // ╭───────────────────────────────────────────────────────╮
     // │                     Write to files                     │
     // ╰───────────────────────────────────────────────────────╯
-    const outputText = CustomUpsampleSubtle.uri
-    const filePath = path.join(__dirname, 'midjourney_image_url.txt'); // Using path.join for cross-platform compatibility
-    // Write to file
+    outputText += CustomUpsampleSubtle.uri + '\n'
+    console.log(outputText)
+
+    // Write to file - method A
+    const filePath = path.join(__dirname, 'midjourney_image_url.txt');
     fs.writeFile(filePath, outputText, (err) => {
         if (err) {
             console.error('Error writing to file:', err);
             return;
         }
     });
-
-    // ╭───────────────────────────────────────────────────────╮
-    // │                 Image Details / Meta                  │
-    // ╰───────────────────────────────────────────────────────╯
-    const filePathB = path.join(__dirname, 'midjourney_image_details.json'); // Using path.join for cross-platform compatibility
-    await fs.promises.writeFile(filePathB, JSON.stringify(CustomUpsampleSubtle, null, 2));
+    
     
 
     // ╭───────────────────────────────────────────────────────╮

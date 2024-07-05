@@ -81,9 +81,9 @@ jobs:
             # ╭───────────────────────────────────────────────────────╮
             # │                  Run Midjourney API                   │
             # ╰───────────────────────────────────────────────────────╯
-            - name: 🏞️ Midjourney - Download Image
+            - name: 🏞️ Midjourney - Download Images
               run: |
-                curl -o midjourney_image.jpg $(cat midjourney_image_url.txt)
+                ./download_images.sh
 
 
 
@@ -92,7 +92,7 @@ jobs:
             # ╰───────────────────────────────────────────────────────╯
             - name: 🌥️ Google Drive - upload
               run: |
-                rclone copy ./midjourney_image.jpg GDrive:/ --config rclone.conf
+                rclone copy . --include "*.png" --include "*.jpg" --include "*.jpeg"  ./midjourney_image.jpg GDrive:/ --config rclone.conf
 
 
 
