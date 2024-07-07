@@ -48,16 +48,16 @@ async function sliceImage() {
 
     await imageOne
             .extract({ left: 0, top: 0, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, 'midjourney_md_image01_${timestamp}.png'));
+            .toFile(path.join(outputDir, `midjourney_md_image01_${timestamp}.png`));
     await imageTwo
             .extract({ left: halfWidth, top: 0, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, 'midjourney_md_image02_${timestamp}.png'));
+            .toFile(path.join(outputDir, `midjourney_md_image02_${timestamp}.png`));
     await imageThree
             .extract({ left: 0, top: halfHeight, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, 'midjourney_md_image03_${timestamp}.png'));
+            .toFile(path.join(outputDir, `midjourney_md_image03_${timestamp}.png`));
     await imageFour
             .extract({ left: halfWidth, top: halfHeight, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, 'midjourney_md_image04_${timestamp}.png'));
+            .toFile(path.join(outputDir, `midjourney_md_image04_${timestamp}.png`));
 
 
     console.log('Image sliced into four quarters successfully.');
