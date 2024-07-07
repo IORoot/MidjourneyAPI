@@ -139,7 +139,7 @@ async function main() {
     });
 
     // Write to file - method B
-    const filePathB = path.join(__dirname, 'midjourney_image_url_B.json');
+    const filePathB = path.join(__dirname, 'midjourney_image_url_backup.txt');
     await fs.promises.writeFile(filePathB, outputText);
     
     

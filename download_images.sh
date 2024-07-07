@@ -9,13 +9,22 @@ if [ ! -f "$input_file" ]; then
   exit 0
 fi
 
+# Function to get the current timestamp with hhmmss and milliseconds
+get_timestamp() {
+  date +"%H%M%S_%3N"
+}
+
 # Initialize the counter
 counter=1
 
 # Read each line (URL) from the input file
 while IFS= read -r url; do
+
+    # Get new timestamp
+    timestamp=$(get_timestamp)
+
     # Format the output filename with sequential suffix
-    output_file=$(printf "midjourney_image%02d.png" "$counter")
+    output_file=$(printf "midjourney_lg_image%02d_%s.png" "$counter" "$timestamp")
     
     # Download the image using curl
     curl -# -o "$output_file" "$url"
