@@ -60,6 +60,19 @@ if (!prompt) {
     process.exit(1);
 }
 
+// Get the third command-line argument
+const upscaleString = process.argv[3];
+
+// if set
+if (upscaleString) {
+    // Convert the argument to a number
+    let upscale = Number(upscaleString);
+
+    // Check if the conversion resulted in NaN (Not a Number)
+    if (isNaN(upscale)) {
+        upscale = 1;  // Default to 1 if the argument is not a valid number or not supplied
+    }
+}
 
 async function main() {
 
@@ -89,41 +102,50 @@ async function main() {
     const filePathQuad = path.join(__dirname, 'midjourney_images_quad_urls.txt');
     await fs.promises.appendFile(filePathQuad, imagine.uri + '\n');
 
-    // ╭───────────────────────────────────────────────────────╮
-    // │               Select Image to upscale                 │
-    // ╰───────────────────────────────────────────────────────╯
-    const selectedOne = await client.Upscale({
-        index: 1,
-        msgId: <string>imagine.id,
-        hash: <string>imagine.hash,
-        flags: imagine.flags,
-        content: imagine.content,
-    });
-    // console.log( JSON.stringify(selectedOne, null, 2) );
+
 
     // ╭───────────────────────────────────────────────────────╮
-    // │             Upsample on SelectedOne Image             │
+    // │                    Skip Upscaling                     │
     // ╰───────────────────────────────────────────────────────╯
-    const upsample = selectedOne?.options?.find((o) => o.label === "Upscale (Subtle)");
-    if (!upsample) {
-        console.log("no upsample");
-        return;
+    if (upscale) {
+        console.log("Upscaling first Image");
+        
+        
+        // ╭───────────────────────────────────────────────────────╮
+        // │               Select Image to upscale                 │
+        // ╰───────────────────────────────────────────────────────╯
+        const selectedOne = await client.Upscale({
+            index: 1,
+            msgId: <string>imagine.id,
+            hash: <string>imagine.hash,
+            flags: imagine.flags,
+            content: imagine.content,
+        });
+        // console.log( JSON.stringify(selectedOne, null, 2) );
+
+        // ╭───────────────────────────────────────────────────────╮
+        // │             Upsample on SelectedOne Image             │
+        // ╰───────────────────────────────────────────────────────╯
+        const upsample = selectedOne?.options?.find((o) => o.label === "Upscale (Subtle)");
+        if (!upsample) {
+            console.log("no upsample");
+            return;
+        }
+
+        // ╭───────────────────────────────────────────────────────╮
+        // │                    Custom UpSample                    │
+        // ╰───────────────────────────────────────────────────────╯
+        const CustomUpsampleSubtle = await client.Custom({
+            msgId: <string>selectedOne.id,
+            flags: selectedOne.flags,
+            customId: upsample.custom,
+        });
+        // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
+
+        // Write to file - Upscaled Image URI
+        const filePathUpscaled = path.join(__dirname, 'midjourney_images_upscaled_urls.txt');
+        await fs.promises.appendFile(filePathUpscaled, CustomUpsampleSubtle.uri + '\n');
     }
-
-    // ╭───────────────────────────────────────────────────────╮
-    // │                    Custom UpSample                    │
-    // ╰───────────────────────────────────────────────────────╯
-    const CustomUpsampleSubtle = await client.Custom({
-        msgId: <string>selectedOne.id,
-        flags: selectedOne.flags,
-        customId: upsample.custom,
-    });
-    // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
-
-    // Write to file - Upscaled Image URI
-    const filePathUpscaled = path.join(__dirname, 'midjourney_images_upscaled_urls.txt');
-    await fs.promises.appendFile(filePathUpscaled, CustomUpsampleSubtle.uri + '\n');
-    
 
     // ╭───────────────────────────────────────────────────────╮
     // │                Finish and close client                │
