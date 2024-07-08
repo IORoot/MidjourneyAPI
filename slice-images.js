@@ -17,20 +17,11 @@ if (!fs.existsSync(outputDir)){
     fs.mkdirSync(outputDir);
 }
 
-function getTimestamp() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-    return `${hours}${minutes}${seconds}_${milliseconds}`;
-}
-
-
 // Function to slice the image into four quarters
 async function sliceImage() {
 
-    const timestamp = getTimestamp();
+    // Parse input file name without extension
+    const inputFileName = path.parse(inputImagePath).name;
 
     const imageOne = sharp(inputImagePath);
     const imageTwo = sharp(inputImagePath);
@@ -48,16 +39,16 @@ async function sliceImage() {
 
     await imageOne
             .extract({ left: 0, top: 0, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, `midjourney_md_image01_${timestamp}.png`));
+            .toFile(path.join(outputDir, `${inputFileName}_01.png`));
     await imageTwo
             .extract({ left: halfWidth, top: 0, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, `midjourney_md_image02_${timestamp}.png`));
+            .toFile(path.join(outputDir, `${inputFileName}_02.png`));
     await imageThree
             .extract({ left: 0, top: halfHeight, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, `midjourney_md_image03_${timestamp}.png`));
+            .toFile(path.join(outputDir, `${inputFileName}_03.png`));
     await imageFour
             .extract({ left: halfWidth, top: halfHeight, width: halfWidth, height: halfHeight })
-            .toFile(path.join(outputDir, `midjourney_md_image04_${timestamp}.png`));
+            .toFile(path.join(outputDir, `${inputFileName}_04.png`));
 
 
     console.log('Image sliced into four quarters successfully.');

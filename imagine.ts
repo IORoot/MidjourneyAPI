@@ -15,8 +15,8 @@
 // a high-res version.
 //
 // The output will be:
-// midjourney_image_quad_url.txt      - URL of the image with four versions
-// midjourney_image_upscaled_url.txt  - URL of the upscaled generated image
+// midjourney_images_quad_urls.txt      - URL of the image with four versions
+// midjourney_images_upscaled_urls.txt  - URL of the upscaled generated image
 //
 // You can download the image using curl:
 // > curl -o midjourney_image.jpg $(cat image_url.txt)
@@ -86,7 +86,7 @@ async function main() {
     }
 
     // Write to file - The quad of images URI
-    const filePathQuad = path.join(__dirname, 'midjourney_image_quad_url.txt');
+    const filePathQuad = path.join(__dirname, 'midjourney_images_quad_urls.txt');
     await fs.promises.appendFile(filePathQuad, imagine.uri + '\n');
 
     // ╭───────────────────────────────────────────────────────╮
@@ -121,9 +121,8 @@ async function main() {
     // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
 
     // Write to file - Upscaled Image URI
-    const filePathUpscaled = path.join(__dirname, 'midjourney_image_url_upscaled.txt');
+    const filePathUpscaled = path.join(__dirname, 'midjourney_images_upscaled_urls.txt');
     await fs.promises.appendFile(filePathUpscaled, CustomUpsampleSubtle.uri + '\n');
-    
     
 
     // ╭───────────────────────────────────────────────────────╮
