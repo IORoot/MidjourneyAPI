@@ -102,7 +102,6 @@ async function main() {
         if (isNaN(upscale)) {
             upscale = 1;  // Default to 1 if the argument is not a valid number or not supplied
         }
-
         console.log(`Upscaling Image: ${upscale}`);
         
         
@@ -116,6 +115,7 @@ async function main() {
             flags: imagine.flags,
             content: imagine.content,
         });
+        console.log("Selected Upscale image");
         // console.log( JSON.stringify(selectedOne, null, 2) );
 
         // ╭───────────────────────────────────────────────────────╮
@@ -136,10 +136,12 @@ async function main() {
             customId: upsample.custom,
         });
         // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
+        console.log("Upsample Complete");
 
         // Write to file - Upscaled Image URI
         const filePathUpscaled = path.join(__dirname, 'midjourney_images_upscaled_urls.txt');
         await fs.promises.appendFile(filePathUpscaled, CustomUpsampleSubtle.uri + '\n');
+        console.log(`Written to file: ${filePathUpscaled}`);
     }
 
     // ╭───────────────────────────────────────────────────────╮
