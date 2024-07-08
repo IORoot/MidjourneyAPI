@@ -61,18 +61,7 @@ if (!prompt) {
 }
 
 // Get the third command-line argument
-const upscaleString = process.argv[3];
-
-// if set
-if (upscaleString) {
-    // Convert the argument to a number
-    let upscale = Number(upscaleString);
-
-    // Check if the conversion resulted in NaN (Not a Number)
-    if (isNaN(upscale)) {
-        upscale = 1;  // Default to 1 if the argument is not a valid number or not supplied
-    }
-}
+let upscale = Number(process.argv[3]);
 
 async function main() {
 
@@ -108,14 +97,20 @@ async function main() {
     // │                    Skip Upscaling                     │
     // ╰───────────────────────────────────────────────────────╯
     if (upscale) {
-        console.log("Upscaling first Image");
+
+        // Check if the conversion resulted in NaN (Not a Number)
+        if (isNaN(upscale)) {
+            upscale = 1;  // Default to 1 if the argument is not a valid number or not supplied
+        }
+
+        console.log(`Upscaling Image: ${upscale}`);
         
         
         // ╭───────────────────────────────────────────────────────╮
         // │               Select Image to upscale                 │
         // ╰───────────────────────────────────────────────────────╯
         const selectedOne = await client.Upscale({
-            index: 1,
+            index: upscale,
             msgId: <string>imagine.id,
             hash: <string>imagine.hash,
             flags: imagine.flags,
