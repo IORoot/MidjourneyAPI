@@ -15,8 +15,8 @@
 // a high-res version.
 //
 // The output will be:
-// midjourney_image_url.txt      - This holds the URL of the final image
-// midjourney_image_details.json - This holds more data about the generated image.
+// midjourney_image_quad_url.txt      - URL of the image with four versions
+// midjourney_image_upscaled_url.txt  - URL of the upscaled generated image
 //
 // You can download the image using curl:
 // > curl -o midjourney_image.jpg $(cat image_url.txt)
@@ -63,8 +63,6 @@ if (!prompt) {
 
 async function main() {
 
-    let outputText
-
 	// ╭───────────────────────────────────────────────────────╮
 	// │              Establish Midjourney Client              │
 	// ╰───────────────────────────────────────────────────────╯
@@ -86,9 +84,10 @@ async function main() {
         console.log("no message");
         return;
     }
-    // console.log( JSON.stringify(imagine, null, 2) );
-    outputText = imagine.uri + '\n'
 
+    // Write to file - The quad of images URI
+    const filePathQuad = path.join(__dirname, 'midjourney_image_quad_url.txt');
+    await fs.promises.appendFile(filePathQuad, imagine.uri + '\n');
 
     // ╭───────────────────────────────────────────────────────╮
     // │               Select Image to upscale                 │
@@ -101,7 +100,6 @@ async function main() {
         content: imagine.content,
     });
     // console.log( JSON.stringify(selectedOne, null, 2) );
-    // outputText += selectedOne.uri + '\n'
 
     // ╭───────────────────────────────────────────────────────╮
     // │             Upsample on SelectedOne Image             │
@@ -121,26 +119,10 @@ async function main() {
         customId: upsample.custom,
     });
     // console.log("Custom Upsample", JSON.stringify(CustomUpsampleSubtle, null, 2) );
-    // console.log(CustomUpsampleSubtle.uri)
 
-    // ╭───────────────────────────────────────────────────────╮
-    // │                     Write to files                     │
-    // ╰───────────────────────────────────────────────────────╯
-    outputText += CustomUpsampleSubtle.uri + '\n'
-    console.log(outputText)
-
-    // Write to file - method A
-    const filePath = path.join(__dirname, 'midjourney_image_url.txt');
-    fs.writeFile(filePath, outputText, (err) => {
-        if (err) {
-            console.error('Error writing to file:', err);
-            return;
-        }
-    });
-
-    // Write to file - method B
-    const filePathB = path.join(__dirname, 'midjourney_image_url_backup.txt');
-    await fs.promises.writeFile(filePathB, outputText);
+    // Write to file - Upscaled Image URI
+    const filePathUpscaled = path.join(__dirname, 'midjourney_image_url_upscaled.txt');
+    await fs.promises.appendFile(filePathUpscaled, CustomUpsampleSubtle.uri + '\n');
     
     
 
