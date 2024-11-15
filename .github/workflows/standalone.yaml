@@ -12,15 +12,6 @@ on:
         prompt:
           description: 'Midjourney Prompt'     
           required: true
-        server_id:
-          description: 'DISCORD Server ID'     
-          required: true
-        channel_id:
-          description: 'DISCORD Channel ID'     
-          required: true
-        salai_token:
-          description: 'DISCORD Salai Token'     
-          required: true
           
 
 jobs:
