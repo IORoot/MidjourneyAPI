@@ -64,7 +64,7 @@ jobs:
               run: |
                 npx tsx imagine.ts "${{ github.event.inputs.prompt }}"
                 ls -la
-
+                cat midjourney_images_quad_urls.txt
 
 
             # ╭──────────────────────────────────────────────────────────────────────────╮
