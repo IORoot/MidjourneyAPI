@@ -52,10 +52,7 @@ jobs:
             # ╰───────────────────────────────────────────────────────╯
             - name: 🎛️ SETUP - Base64 decode Configs
               run: |
-                echo "TEST=\"${{ github.event.inputs.test }}\"" > .env
-                echo "SERVER_ID=\"${{ github.event.inputs.server_id }}\"" > .env
-                echo "CHANNEL_ID=\"${{ github.event.inputs.channel_id }}\"" > .env
-                echo "SALAI_TOKEN=\"${{ github.event.inputs.salai_token }}\"" > .env
+                echo "${{ secrets.ENV_B64 }}" | base64 --decode > .env
 
 
 
@@ -74,7 +71,6 @@ jobs:
             # ╰───────────────────────────────────────────────────────╯
             - name: 🏞️ Midjourney - Run
               run: |
-                echo ${{ github.event.inputs.test }}
                 npx tsx imagine.ts "${{ github.event.inputs.prompt }}"
                 ls -la
 
