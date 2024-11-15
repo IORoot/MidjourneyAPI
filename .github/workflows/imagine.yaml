@@ -88,6 +88,7 @@ jobs:
               run: |
                 ./download_images.sh
                 ls -la
+                cat midjourney_images_quad_urls.txt
 
      
             # ╭───────────────────────────────────────────────────────╮
