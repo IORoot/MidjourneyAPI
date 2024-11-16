@@ -67,6 +67,30 @@ jobs:
                 cat midjourney_images_quad_urls.txt
                 cat midjourney_images_upscaled_urls.txt
 
+            # ╭───────────────────────────────────────────────────────╮
+            # │                  Send to output                       │
+            # ╰───────────────────────────────────────────────────────╯
+            - name: Read the file and set output
+              id: read_file
+              run: |
+                if [ -f midjourney_images_upscaled_urls.txt ]; then
+                  content=$(cat midjourney_images_upscaled_urls.txt)
+                  echo "::set-output name=upscaled_urls::$content"
+                else
+                  echo "::set-output name=upscaled_urls::File not found"
+                fi
+      
+
+
+            # ╭───────────────────────────────────────────────────────╮
+            # │                           DEBUG                       │
+            # ╰───────────────────────────────────────────────────────╯
+            - name: Print the output
+              run: |
+                echo "Upscaled URLs: ${{ steps.read_file.outputs.upscaled_urls }}"
+              
+
+
 
             # ╭──────────────────────────────────────────────────────────────────────────╮
             # │                                                                          │░
