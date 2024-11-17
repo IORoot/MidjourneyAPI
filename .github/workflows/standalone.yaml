@@ -69,6 +69,7 @@ jobs:
                 cat midjourney_images_upscaled_urls.txt
               
 
+                
             # Step 3: Configure Git
             - name: Configure Git
               run: |
