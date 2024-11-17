@@ -50,17 +50,17 @@ jobs:
         
             # URL=$(cat midjourney_images_upscaled_urls.txt)
             - name: Trigger Return Webhook
-            continue-on-error: true
-            run: |
-              URL="https://cdn.discordapp.com/attachments/1096417490558521389/1307636722837884938/ioroot_Photorealistic_photo_on_parkour_and_the_topic_c0c3dae0-b8d4-4cb6-96bf-1fd934a0f890.png?ex=673b0719&is=6739b599&hm=96d2367471481a9bc906469a85faf345d4bed937146d9bcafb81632716f0af98&"
-              curl -X PUT ${{ github.event.inputs.return_webhook }} \
-                -H "Content-Type: application/json" \
-                -H "X-API-TOKEN: ${{ github.event.inputs.return_token }}" \
-                -d "{
-                    \"post_type\": \"${{ github.event.inputs.post_type }}\",
-                    \"post_id\": \"${{ github.event.inputs.post_id }}\",
-                    \"url\": \"${URL}\",
-                }"
+              continue-on-error: true
+              run: |
+                URL="https://cdn.discordapp.com/attachments/1096417490558521389/1307636722837884938/ioroot_Photorealistic_photo_on_parkour_and_the_topic_c0c3dae0-b8d4-4cb6-96bf-1fd934a0f890.png?ex=673b0719&is=6739b599&hm=96d2367471481a9bc906469a85faf345d4bed937146d9bcafb81632716f0af98&"
+                curl -X PUT ${{ github.event.inputs.return_webhook }} \
+                  -H "Content-Type: application/json" \
+                  -H "X-API-TOKEN: ${{ github.event.inputs.return_token }}" \
+                  -d "{
+                      \"post_type\": \"${{ github.event.inputs.post_type }}\",
+                      \"post_id\": \"${{ github.event.inputs.post_id }}\",
+                      \"url\": \"${URL}\",
+                  }"
 
 
 
