@@ -18,7 +18,8 @@ jobs:
 
     midjourney:
         runs-on: ubuntu-latest
-
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
 
             # ╭───────────────────────────────────────────────────────╮
@@ -75,21 +76,27 @@ jobs:
               run: |
                 if [ -f midjourney_images_upscaled_urls.txt ]; then
                   content=$(cat midjourney_images_upscaled_urls.txt)
-                  echo "::set-output name=upscaled_urls::$content"
+                  echo "upscaled_urls=$content" > result.txt
                 else
-                  echo "::set-output name=upscaled_urls::File not found"
-                fi
-      
-
-
-            # ╭───────────────────────────────────────────────────────╮
-            # │                           DEBUG                       │
-            # ╰───────────────────────────────────────────────────────╯
-            - name: Print the output
-              run: |
-                echo "Upscaled URLs: ${{ steps.read_file.outputs.upscaled_urls }}"
+                  echo "upscaled_urls=File not found" > result.txt
               
 
+            # Step 3: Configure Git
+            - name: Configure Git
+              run: |
+                git config --global user.name "github-actions[bot]"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+
+
+            # Step 4: Commit changes
+            - name: Commit changes
+              run: |
+                git add .
+                git commit -m "Automated commit by GitHub Actions"
+                git push
+
+            
 
 
             # ╭──────────────────────────────────────────────────────────────────────────╮
