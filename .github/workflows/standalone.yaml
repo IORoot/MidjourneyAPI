@@ -15,6 +15,15 @@ on:
         return_webhook:
           description: "Return Webhook URL"
           required: true
+        return_token:
+          description: "Return Webhook Token"
+          required: true
+        post_type:
+          description: "Post Type to update"
+          required: true
+        post_id:
+          description: "ID Of Post to update"
+          required: true
           
 
 jobs:
@@ -81,11 +90,23 @@ jobs:
             - name: Trigger Return Webhook
               continue-on-error: true
               run: |
-                file_content=$(cat midjourney_images_upscaled_urls.txt)
-                curl -X POST \
+                URL=$(cat midjourney_images_upscaled_urls.txt)
+                curl -X PUT \
                   -H "Content-Type: text/plain" \
+                  -H "X-API-TOKEN: ${{ github.event.inputs.return_token }}" \
                   --data-raw "$file_content" \
                   ${{ github.event.inputs.return_webhook }}
+
+
+                curl -X PUT ${{ github.event.inputs.return_webhook }} \
+                  -H "Content-Type: application/json" \
+                  -H "X-API-TOKEN: ${{ github.event.inputs.return_token }}" \
+                  -d "{
+                      \"post_type\": \"${{ github.event.inputs.post_type }}\",
+                      \"post_id\": \"${{ github.event.inputs.post_id }}\",
+                      \"url\": \"${URL}\",
+                  }"
+
 
 
             # ╭──────────────────────────────────────────────────────────────────────────╮
