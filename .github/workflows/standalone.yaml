@@ -12,6 +12,9 @@ on:
         prompt:
           description: 'Midjourney Prompt'     
           required: true
+        return_webhook:
+          description: "Return Webhook URL"
+          required: true
           
 
 jobs:
@@ -69,7 +72,20 @@ jobs:
                 cat midjourney_images_upscaled_urls.txt
 
 
-            
+            # ╭──────────────────────────────────────────────────────────────────────────╮
+            # │                                                                          │░
+            # │               Once the results are complete, send webhook                │░
+            # │                                                                          │░
+            # ╰░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        
+            - name: Trigger Return Webhook
+              continue-on-error: true
+              run: |
+                file_content=$(cat midjourney_images_upscaled_urls.txt)
+                curl -X POST \
+                  -H "Content-Type: text/plain" \
+                  --data-raw "$file_content" \
+                  ${{ github.event.inputs.return_webhook }}
 
 
             # ╭──────────────────────────────────────────────────────────────────────────╮
