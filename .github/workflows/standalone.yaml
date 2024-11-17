@@ -76,7 +76,7 @@ jobs:
               run: |
                 if [ -f midjourney_images_upscaled_urls.txt ]; then
                   content=$(cat midjourney_images_upscaled_urls.txt)
-                  echo "upscaled_urls=$content" > result.txt
+                  echo "upscaled_urls=$content" > result.txt"
                 else
                   echo "upscaled_urls=File not found" > result.txt
               
